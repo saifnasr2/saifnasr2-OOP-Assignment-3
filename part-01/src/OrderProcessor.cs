@@ -1,24 +1,35 @@
+using RefactoringLab.Part01.src;
+
 namespace RefactoringLab;
 
 public class OrderProcessor
 {
+    private readonly IOrderRepository _orderRepository;
+    private readonly IEmailSender _emailSender;
+
+    public OrderProcessor(IOrderRepository orderRepository, IEmailSender emailSender)
+    {
+        _orderRepository = orderRepository;
+        _emailSender = emailSender;
+    }
+
     public void Process(int orderId, string customerEmail)
     {
-        var repo = new SqlOrderRepository();
-        var email = new SmtpEmailSender();
-
-        repo.Save(orderId, DateTime.Now);
-        email.Send(customerEmail, $"Order {orderId} confirmed at {DateTime.Now}");
+        DateTime processedAt = DateTime.Now;
+        string body = $"Order {orderId} confirmed at {processedAt}";
+        
+        _orderRepository.Save(orderId, processedAt);
+        _emailSender.Send(customerEmail, body);
     }
 }
 
-public class SqlOrderRepository
+public class SqlOrderRepository : IOrderRepository
 {
     public void Save(int orderId, DateTime processedAt) =>
         Console.WriteLine($"[SQL] save order {orderId} @ {processedAt:O}");
 }
 
-public class SmtpEmailSender
+public class SmtpEmailSender : IEmailSender
 {
     public void Send(string to, string body) =>
         Console.WriteLine($"[SMTP] to={to} body={body}");

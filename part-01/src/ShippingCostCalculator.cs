@@ -1,19 +1,49 @@
+using RefactoringLab.Part01.src;
+
 namespace RefactoringLab;
 
 public class ShippingCostCalculator
 {
-    public decimal Calculate(string carrier, decimal weightKg)
+    private readonly ICarrier _carrier;
+    public ShippingCostCalculator(ICarrier carrier)
     {
-        switch (carrier)
-        {
-            case "Aramex":
-                return weightKg * 12m;
-            case "FedEx":
-                return weightKg * 15m;
-            case "DHL":
-                return weightKg * 18m;
-            default:
-                throw new ArgumentException($"Unknown carrier: {carrier}");
-        }
+        _carrier = carrier ?? throw new ArgumentNullException(nameof(carrier));
+    }
+
+    public decimal Calculate(decimal weightKg)
+    { 
+        return _carrier.Calculate(weightKg);
+    }
+}
+
+public class Aramex : ICarrier
+{
+    public decimal Calculate(decimal weightKg)
+    {
+        return weightKg * 12m;
+    }
+}
+
+public class FedEx : ICarrier
+{
+    public decimal Calculate(decimal weightKg)
+    {
+        return weightKg * 15m;
+    }
+}
+
+public class DHL : ICarrier
+{
+    public decimal Calculate(decimal weightKg)
+    {
+        return weightKg * 18m;
+    }
+}
+
+public class UPS : ICarrier
+{
+    public decimal Calculate(decimal weightKg)
+    {
+        return weightKg * 20m;
     }
 }
