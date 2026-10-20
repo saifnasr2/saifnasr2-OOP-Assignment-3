@@ -1,0 +1,2 @@
+## What is the same between two stores, and what is different?
+- The Two stores' methods are completely in similar , the difference just that course store stores courses and student store stores students.
