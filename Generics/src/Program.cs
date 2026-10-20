@@ -4,30 +4,57 @@ class Program
 {
     static void Main(string[] args)
     {
-        var store = new StudentStore();
+        var studentStore = new Store<Student>();
+        var courseStore = new Store<Course>();
 
-        // 1. Add two students and retrieve each by ID.
-        store.Add(new Student { Id = 1, Name = "Ahmed" });
-        store.Add(new Student { Id = 2, Name = "Mona" });
+        // Add students
+        studentStore.Add(new Student { Id = 1, Name = "Ahmed" });
+        studentStore.Add(new Student { Id = 2, Name = "Mona" });
+        studentStore.Add(new Student { Id = 3, Name = "Omar" });
+        studentStore.Add(new Student { Id = 4, Name = "Salma" });
+        studentStore.Add(new Student { Id = 5, Name = "Youssef" });
 
-        Console.WriteLine("Test 1: Add and retrieve students");
-        Console.WriteLine(store.GetById(1)?.Name == "Ahmed"); // True
-        Console.WriteLine(store.GetById(2)?.Name == "Mona");  // True
+        // Add courses
+        courseStore.Add(new Course { Id = 101, Title = "C# Fundamentals", Price = 1500 });
+        courseStore.Add(new Course { Id = 102, Title = "OOP with C#", Price = 2000 });
+        courseStore.Add(new Course { Id = 103, Title = "Data Structures", Price = 2500 });
+        courseStore.Add(new Course { Id = 104, Title = "SQL Database", Price = 1800 });
+        courseStore.Add(new Course { Id = 105, Title = "ASP.NET Core", Price = 3000 });
 
-        // 2. Search for an ID that doesn't exist.
-        Console.WriteLine("\nTest 2: Missing student");
-        Console.WriteLine(store.GetById(99) is null); // True
+        Console.WriteLine(studentStore.GetById(3)?.Name);
+        // Expected: Omar
 
-        // 3. Remove an existing student and verify it is gone.
-        store.Remove(1);
+        Console.WriteLine(courseStore.GetById(103)?.Title);
+        // Expected: Data Structures
 
-        Console.WriteLine("\nTest 3: Remove existing student");
-        Console.WriteLine(store.GetById(1) is null); // True
-        Console.WriteLine(store.GetAll().Count == 1); // True
+        Console.WriteLine(studentStore.GetById(99) is null);
+        // Expected: True
 
-        // 4. Remove a nonexistent ID — expect no exception.
-        Console.WriteLine("\nTest 4: Remove nonexistent student");
-        store.Remove(99);
-        Console.WriteLine("No exception thrown."); // Reaching this line means success
+        Console.WriteLine(courseStore.GetById(999) is null);
+        // Expected: True
+        
+        studentStore.Remove(2);
+        courseStore.Remove(102);
+
+        Console.WriteLine(studentStore.GetById(2) is null);
+        // Expected: True
+
+        Console.WriteLine(courseStore.GetById(102) is null);
+        // Expected: True
+
+        Console.WriteLine(studentStore.GetAll().Count);
+        // Expected: 4
+
+        Console.WriteLine(courseStore.GetAll().Count);
+        // Expected: 4
+
+        studentStore.Remove(99);
+        courseStore.Remove(999);
+
+        Console.WriteLine(studentStore.GetAll().Count);
+        // Expected: 4
+
+        Console.WriteLine(courseStore.GetAll().Count);
+        // Expected: 4
     }
 }
