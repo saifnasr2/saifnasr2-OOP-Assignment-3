@@ -4,30 +4,34 @@ namespace GenericsPart;
 
 public class Store<T> where T : class , IHasId 
 {
-    private readonly List<T> store = new();
+    private readonly Dictionary<int, T> store = new();
 
     public void Add(T item)
     {
-        store.Add(item);
+        try
+        {
+            store.Add(item.Id, item);
+        }
+        catch (ArgumentException)
+        {
+            throw new ArgumentException($"An item with id {item.Id} already exists.");
+        }
     }
 
     public T? GetById(int id) 
     {
-        foreach(var item in store)
-        {
-            if(item.Id == id)
-                return item;
-        }
+        if(store.TryGetValue(id, out var item))
+            return item;
         return null;
     }
 
-    public IReadOnlyList<T> GetAll()
+    public IReadOnlyDictionary<int, T> GetAll()
     {
         return store;   
     }
 
     public void Remove(int id)
     {
-        store.Remove(GetById(id)!);
+        store.Remove(id);
     }
 }
